@@ -149,7 +149,7 @@ http://localhost:5173
 
 **Demo Credentials:**
 - Email: `user@ems.com`
-- Password: `user123`
+- Password: `user123456`
 
 ### 🏪 Vendor
 - Register and manage business profile
@@ -160,7 +160,7 @@ http://localhost:5173
 
 **Demo Credentials:**
 - Email: `vendor@ems.com`
-- Password: `vendor123`
+- Password: `vendor123456`
 
 **Pre-loaded Vendors:**
 1. Golden Fork Catering - Catering services
@@ -177,15 +177,15 @@ http://localhost:5173
 
 **Demo Credentials:**
 - Email: `admin@ems.com`
-- Password: `admin123`
+- Password: `admin123456`
 
 ## Demo Credentials
 
 | Role | Email | Password |
 |------|-------|----------|
-| User | `user@ems.com` | `user123` |
-| Vendor | `vendor@ems.com` | `vendor123` |
-| Admin | `admin@ems.com` | `admin123` |
+| User | `user@ems.com` | `user123456` |
+| Vendor | `vendor@ems.com` | `vendor123456` |
+| Admin | `admin@ems.com` | `admin123456` |
 
 ## Key Features
 

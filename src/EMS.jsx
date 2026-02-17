@@ -1,8 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 
-/* ═══════════════════════════════════════════════════════════
-   GLOBAL STYLES  (injected once)
-═══════════════════════════════════════════════════════════ */
+/* Global styles injected into the page */
 const STYLE = `
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
@@ -70,13 +68,13 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
-/* ── Layout ── */
+/* Layout basics */
 .page { min-height: 100vh; display: flex; flex-direction: column; animation: fadeIn 0.4s ease-out; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ── Navbar ── */
+/* Navigation Bar styles */
 .navbar {
   background: var(--glass);
   backdrop-filter: blur(20px);
@@ -102,7 +100,7 @@ body {
 }
 .navbar-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-/* ── Buttons ── */
+/* Button styles */
 .btn {
   padding: 10px 24px;
   border-radius: 50px;
@@ -132,7 +130,7 @@ body {
 .btn-ghost:hover { color: var(--text); background: var(--surface2); }
 .btn-icon { padding: 10px; border-radius: 50%; display: grid; place-items: center; width: 40px; height: 40px; }
 
-/* ── Hero ── */
+/* Hero section styles */
 .hero { text-align: center; padding: 100px 20px 80px; position: relative; }
 .hero::before {
   content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -165,7 +163,7 @@ body {
 }
 .hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
 
-/* ── Cards ── */
+/* Card component styles */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -185,7 +183,7 @@ body {
 .card-grid-3 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 .card-grid-4 { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
 
-/* ── Auth Forms ── */
+/* Authentication forms styling */
 .auth-container {
   display: flex;
   min-height: 100vh;
@@ -207,6 +205,12 @@ body {
 .auth-sub { color: var(--muted); margin-bottom: 32px; font-size: 0.95rem; }
 
 .form-group { margin-bottom: 20px; text-align: left; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 0; }
+.field label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.field input, .field select { width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 1rem; outline: none; transition: var(--transition); }
+.field input:focus, .field select:focus { border-color: var(--accent2); background: var(--bg); box-shadow: 0 0 0 4px rgba(91,141,238,0.1); }
+@media (max-width: 640px) { .form-row { grid-template-columns: 1fr; gap: 16px; } }
 .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
 .form-input {
   width: 100%;
@@ -224,7 +228,7 @@ body {
 .form-note a { color: var(--accent2); text-decoration: none; font-weight: 600; cursor: pointer; }
 .form-note a:hover { text-decoration: underline; }
 
-/* ── Utility ── */
+/* Utility classes */
 .badge { padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
 .badge-accent { background: rgba(232, 184, 109, 0.15); color: var(--accent); }
 .badge-blue { background: rgba(37, 99, 235, 0.1); color: var(--accent2); }
@@ -254,14 +258,14 @@ tr:hover td { background: var(--surface2); }
 }
 
 
-/* ── Tabs ── */
+/* Tab navigation styles */
 .tabs { display: flex; gap: 12px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
 .tab { white-space: nowrap; padding: 8px 16px; border-radius: 50px; background: var(--surface2); color: var(--muted); border: 1px solid transparent; cursor: pointer; transition: var(--transition); font-weight: 500; font-size: 0.9rem; }
 .tab.active { background: var(--accent); color: white; border-color: var(--accent); }
 .tab:hover:not(.active) { background: var(--surface); color: var(--text); border-color: var(--border); }
 
-/* ── Responsive Layouts ── */
+/* Responsive layouts for different screens */
 .cart-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
 .guest-layout { display: grid; grid-template-columns: 1fr 300px; gap: 24px; }
 .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -286,48 +290,46 @@ tr:hover td { background: var(--surface2); }
 }
 `;
 
-/* ═══════════════════════════════════════════════════════════
-   CONTEXT & STORE
-═══════════════════════════════════════════════════════════ */
+// App Context and Initial State
 const AppCtx = createContext(null);
 
 const INITIAL = {
-  users: [{ id: 1, name: "Alice", email: "user@ems.com", password: "user123", role: "user" }],
+  users: [{ id: 1, name: "Bob", email: "user@ems.com", password: "user123456", role: "user" }],
   vendors: [
-    { id: 1, name: "Golden Fork Catering", email: "vendor@ems.com", password: "vendor123",
-      category: "Catering", contact: "+91 9876543210", desc: "Premium catering for all events",
+    { id: 1, name: "Majestic Dining", email: "vendor@ems.com", password: "vendor123456",
+      category: "Catering", contact: "+91 9800000001", desc: "Premium catering for all events",
       products: [
-        { id: 1, name: "Veg Thali", price: 350, emoji: "🍱" },
-        { id: 2, name: "BBQ Platter", price: 650, emoji: "🍖" },
-        { id: 3, name: "Dessert Buffet", price: 450, emoji: "🍰" },
+        { id: 1, name: "Premium Thali", price: 2000, emoji: "🍛" },
+        { id: 2, name: "Platter", price: 650, emoji: "🍖" },
+        { id: 3, name: "Dessert ", price: 450, emoji: "🍰" },
         { id: 4, name: "Welcome Drinks", price: 200, emoji: "🥤" },
       ]},
-    { id: 2, name: "Bloom Florists", email: "bloom@ems.com", password: "bloom123",
-      category: "Florist", contact: "+91 9988776655", desc: "Exquisite floral arrangements",
+    { id: 2, name: "Petal Paradise", email: "bloom@ems.com", password: "bloom123456",
+      category: "Florist", contact: "+91 9900000002", desc: "Exquisite floral arrangements",
       products: [
         { id: 5, name: "Rose Centrepiece", price: 1200, emoji: "🌹" },
         { id: 6, name: "Stage Arch", price: 4500, emoji: "🌸" },
         { id: 7, name: "Table Bouquet", price: 800, emoji: "💐" },
         { id: 8, name: "Entry Garland", price: 2200, emoji: "🌺" },
       ]},
-    { id: 3, name: "Glitter Decorations", email: "glitter@ems.com", password: "glitter123",
-      category: "Decoration", contact: "+91 9123456789", desc: "Stunning event décor & themes",
+    { id: 3, name: "Enchanted Events", email: "glitter@ems.com", password: "glitter123456",
+      category: "Decoration", contact: "+91 9100000003", desc: "Stunning event décor & themes",
       products: [
-        { id: 9, name: "Balloon Wall", price: 3500, emoji: "🎈" },
-        { id: 10, name: "LED Backdrop", price: 8000, emoji: "✨" },
-        { id: 11, name: "Chair Covers", price: 60, emoji: "🪑" },
-        { id: 12, name: "Themed Setup", price: 15000, emoji: "🎪" },
+        { id: 9, name: "Balloon ", price: 2500, emoji: "🎈" },
+        { id: 10, name: "LED ", price: 7000, emoji: "✨" },
+        { id: 11, name: "Chair ", price: 50, emoji: "🪑" },
+        { id: 12, name: "Themed ", price: 1500, emoji: "🎪" },
       ]},
-    { id: 4, name: "Luminary Lighting", email: "lumi@ems.com", password: "lumi123",
-      category: "Lighting", contact: "+91 9001122334", desc: "Professional lighting solutions",
+    { id: 4, name: "Radiant Illumination", email: "lumi@ems.com", password: "lumi123456",
+      category: "Lighting", contact: "+91 9000000004", desc: "Professional lighting solutions",
       products: [
-        { id: 13, name: "Fairy Lights", price: 1500, emoji: "💡" },
-        { id: 14, name: "Laser Show", price: 12000, emoji: "🔦" },
-        { id: 15, name: "Wash Lights", price: 5000, emoji: "🌟" },
+        { id: 13, name: "Fairy Lights", price: 1800, emoji: "💡" },
+        { id: 14, name: "Laser Show", price: 18000, emoji: "🔦" },
+        { id: 15, name: "Wash Lights", price: 7000, emoji: "🌟" },
         { id: 16, name: "Candle Setup", price: 2800, emoji: "🕯️" },
       ]},
   ],
-  admins: [{ id: 1, email: "admin@ems.com", password: "admin123" }],
+  admins: [{ id: 1, email: "admin@ems.com", password: "admin123456" }],
   cart: [],
   orders: [],
   memberships: [],
@@ -433,9 +435,7 @@ function useStore() {
   };
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SMALL SHARED COMPONENTS
-═══════════════════════════════════════════════════════════ */
+// Shared UI Components
 function Toast({ msg, onDone }) {
   useEffect(() => { const t = setTimeout(onDone, 2800); return () => clearTimeout(t); }, []);
   return <div className="toast">✅ {msg}</div>;
@@ -499,11 +499,9 @@ function Navbar({ page, setPage, store }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════
-   PAGES
-═══════════════════════════════════════════════════════════ */
+// Page Components
 
-/* ── HOME ── */
+// Home Page
 function HomePage({ setPage }) {
   return (
     <div className="page">
@@ -535,7 +533,7 @@ function HomePage({ setPage }) {
   );
 }
 
-/* ── AUTH HELPER ── */
+// Auth Helper Component
 function AuthPage({ title, sub, children }) {
   return (
     <div className="auth-container">
@@ -551,9 +549,9 @@ function AuthPage({ title, sub, children }) {
   );
 }
 
-/* ── ADMIN LOGIN ── */
+// Admin Login Page
 function AdminLogin({ setPage, store, toast }) {
-  const [f, setF] = useState({ email: "admin@ems.com", password: "admin123" });
+  const [f, setF] = useState({ email: "admin@ems.com", password: "admin123456" });
   const [err, setErr] = useState("");
   const submit = () => {
     if (store.login("admin", f.email, f.password)) { toast("Welcome Admin!"); setPage("adminDash"); }
@@ -575,9 +573,9 @@ function AdminLogin({ setPage, store, toast }) {
   );
 }
 
-/* ── VENDOR LOGIN ── */
+// Vendor Login Page
 function VendorLogin({ setPage, store, toast }) {
-  const [f, setF] = useState({ email: "vendor@ems.com", password: "vendor123" });
+  const [f, setF] = useState({ email: "vendor@ems.com", password: "vendor123456" });
   const [err, setErr] = useState("");
   const submit = () => {
     if (store.login("vendor", f.email, f.password)) { toast("Welcome back!"); setPage("vendorHome"); }
@@ -599,7 +597,7 @@ function VendorLogin({ setPage, store, toast }) {
   );
 }
 
-/* ── VENDOR SIGNUP ── */
+// Vendor Registration Page
 function VendorSignup({ setPage, store, toast }) {
   const [f, setF] = useState({ name: "", email: "", password: "", category: "Catering" });
   const [err, setErr] = useState("");
@@ -629,9 +627,9 @@ function VendorSignup({ setPage, store, toast }) {
   );
 }
 
-/* ── USER LOGIN ── */
+// User Login Page
 function UserLogin({ setPage, store, toast }) {
-  const [f, setF] = useState({ email: "user@ems.com", password: "user123" });
+  const [f, setF] = useState({ email: "user@ems.com", password: "user123456" });
   const [err, setErr] = useState("");
   const submit = () => {
     if (store.login("user", f.email, f.password)) { toast("Welcome back!"); setPage("userPortal"); }
@@ -653,7 +651,7 @@ function UserLogin({ setPage, store, toast }) {
   );
 }
 
-/* ── USER SIGNUP ── */
+// User Signup Page
 function UserSignup({ setPage, store, toast }) {
   const [f, setF] = useState({ name: "", email: "", password: "" });
   const [err, setErr] = useState("");
@@ -679,7 +677,7 @@ function UserSignup({ setPage, store, toast }) {
   );
 }
 
-/* ── USER PORTAL ── */
+// User Dashboard Portal
 function UserPortal({ setPage, store }) {
   const session = store.getSession();
   const stats = [
@@ -723,7 +721,7 @@ function UserPortal({ setPage, store }) {
   );
 }
 
-/* ── VENDOR BROWSE ── */
+// Vendor Browsing Page
 function VendorBrowse({ setPage, store, setSelectedVendor }) {
   const [tab, setTab] = useState("All");
   const cats = ["All", "Catering", "Florist", "Decoration", "Lighting"];
@@ -762,7 +760,7 @@ function VendorBrowse({ setPage, store, setSelectedVendor }) {
   );
 }
 
-/* ── PRODUCTS ── */
+// Products Listing Page
 function Products({ setPage, store, selectedVendor, toast }) {
   const vendor = store.getVendor(selectedVendor);
   if (!vendor) return null;
@@ -806,7 +804,7 @@ function Products({ setPage, store, selectedVendor, toast }) {
   );
 }
 
-/* ── CART ── */
+// Shopping Cart Page
 function Cart({ setPage, store, toast }) {
   const { cart } = store.state;
   const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
@@ -867,7 +865,7 @@ function Cart({ setPage, store, toast }) {
   );
 }
 
-/* ── CHECKOUT ── */
+// Checkout Process
 function Checkout({ setPage, store, toast, setLastOrder }) {
   const [step, setStep] = useState(1);
   const [f, setF] = useState({ name: "", email: "", number: "", address: "", city: "", state: "", pinCode: "", paymentMethod: "Cash" });
@@ -969,7 +967,7 @@ function Checkout({ setPage, store, toast, setLastOrder }) {
   );
 }
 
-/* ── SUCCESS ── */
+// Order Success Page
 function SuccessPage({ setPage, store, lastOrder }) {
   const order = store.state.orders.find(o => o.id === lastOrder);
   if (!order) return null;
@@ -1005,7 +1003,7 @@ function SuccessPage({ setPage, store, lastOrder }) {
   );
 }
 
-/* ── ORDER STATUS (User) ── */
+// Order Status for Users
 function OrderStatus({ store }) {
   const session = store.getSession();
   const orders = store.state.orders.filter(o => o.userId === session?.id);
@@ -1037,11 +1035,11 @@ function OrderStatus({ store }) {
   );
 }
 
-/* ── GUEST LIST ── */
+// Guest List Management
 function GuestList({ toast }) {
   const [guests, setGuests] = useState([
-    { id: 1, name: "Rahul Sharma", email: "rahul@mail.com", rsvp: "Confirmed", table: "T1" },
-    { id: 2, name: "Priya Nair", email: "priya@mail.com", rsvp: "Pending", table: "T2" },
+    { id: 1, name: "Vikram Malhotra", email: "vikram@mail.com", rsvp: "Confirmed", table: "T1" },
+    { id: 2, name: "Sneha Kapoor", email: "sneha@mail.com", rsvp: "Pending", table: "T2" },
   ]);
   const [f, setF] = useState({ name: "", email: "", rsvp: "Pending", table: "" });
   const add = () => {
@@ -1087,7 +1085,7 @@ function GuestList({ toast }) {
   );
 }
 
-/* ── VENDOR HOME ── */
+// Vendor Home Dashboard
 function VendorHome({ setPage, store }) {
   const session = store.getSession();
   const vendor = store.getVendor(session?.id);
@@ -1132,7 +1130,7 @@ function VendorHome({ setPage, store }) {
   );
 }
 
-/* ── YOUR ITEMS ── */
+// Vendor Items List
 function YourItems({ setPage, store, toast }) {
   const session = store.getSession();
   const vendor = store.getVendor(session?.id);
@@ -1185,7 +1183,7 @@ function YourItems({ setPage, store, toast }) {
   );
 }
 
-/* ── ADD ITEM ── */
+// Add New Item Page
 function AddItem({ setPage, store, toast }) {
   const session = store.getSession();
   const [f, setF] = useState({ name: "", price: "", emoji: "📦" });
@@ -1223,7 +1221,7 @@ function AddItem({ setPage, store, toast }) {
   );
 }
 
-/* ── TRANSACTIONS (Vendor) ── */
+// Vendor Transactions
 function Transactions({ store }) {
   const session = store.getSession();
   const vendor = store.getVendor(session?.id);
@@ -1257,7 +1255,7 @@ function Transactions({ store }) {
   );
 }
 
-/* ── PRODUCT STATUS (Vendor manages orders) ── */
+// Product Status Management
 function ProductStatus({ store, toast }) {
   const orders = store.state.orders;
   const statuses = ["Received", "Ready for Shipping", "Out For Delivery"];
@@ -1294,7 +1292,7 @@ function ProductStatus({ store, toast }) {
   );
 }
 
-/* ── REQUEST ITEM ── */
+// Request New Item Page
 function RequestItem({ store, toast }) {
   const [f, setF] = useState({ item: "", desc: "" });
   const session = store.getSession();
@@ -1331,7 +1329,7 @@ function RequestItem({ store, toast }) {
   );
 }
 
-/* ── ADMIN DASHBOARD ── */
+// Admin Dashboard
 function AdminDash({ setPage }) {
   return (
     <div className="page"><div className="container">
@@ -1358,7 +1356,7 @@ function AdminDash({ setPage }) {
   );
 }
 
-/* ── MAINTAIN USERS ── */
+// User Maintenance (Admin)
 function MaintainUser({ store, toast }) {
   const [f, setF] = useState({ name: "", email: "", password: "" });
   return (
@@ -1396,7 +1394,7 @@ function MaintainUser({ store, toast }) {
   );
 }
 
-/* ── MAINTAIN VENDORS ── */
+// Vendor Maintenance (Admin)
 function MaintainVendor({ store, toast }) {
   return (
     <div className="page"><div className="container">
@@ -1421,7 +1419,7 @@ function MaintainVendor({ store, toast }) {
   );
 }
 
-/* ── MEMBERSHIP ── */
+// Membership Management
 function Membership({ store, toast }) {
   const [mode, setMode] = useState("add");
   const [f, setF] = useState({ vendorId: "", plan: "6 months", price: "5000" });
@@ -1493,7 +1491,7 @@ function Membership({ store, toast }) {
   );
 }
 
-/* ── ALL ORDERS (Admin) ── */
+// All Orders View (Admin)
 function AllOrders({ store }) {
   const orders = store.state.orders;
   return (
@@ -1524,9 +1522,7 @@ function AllOrders({ store }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ROUTER / APP ROOT
-═══════════════════════════════════════════════════════════ */
+// Main App Component & Router
 export default function App() {
   const store = useStore();
   const [page, setPage] = useState("home");

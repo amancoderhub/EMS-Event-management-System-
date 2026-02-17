@@ -4,52 +4,54 @@ import { useState, useEffect, createContext, useContext } from "react";
    GLOBAL STYLES  (injected once)
 ═══════════════════════════════════════════════════════════ */
 const STYLE = `
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=Cinzel:wght@700&family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Default Dark Theme */
-  --bg: #0a0f1e;
-  --surface: #111827;
-  --surface2: #1a2235;
-  --border: #1f2d45;
-  --text: #e8edf5;
-  --muted: #94a3b8;
-  --accent: #e8b86d;
-  --accent-glow: rgba(232, 184, 109, 0.5);
-  --accent2: #5b8dee;
-  --accent3: #4fd1a5;
-  --danger: #f87171;
-  --glass: rgba(17, 24, 39, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --page-gradient: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(91,141,238,0.15), transparent),
-                   radial-gradient(circle at 100% 100%, rgba(79,209,165,0.08), transparent);
+  /* Dark Red & Black Theme */
+  --bg: #050505;
+  --surface: #121212;
+  --surface2: #1e1e1e;
+  --border: #333333;
+  --text: #e0e0e0;
+  --muted: #a0a0a0;
   
-  --font-display: 'Playfair Display', serif;
+  --accent: #c62828;      /* Dark Red */
+  --accent-glow: rgba(198, 40, 40, 0.4);
+  --accent2: #e53935;     /* Red */
+  --accent3: #ef5350;     /* Light Red */
+  
+  --danger: #d32f2f;
+  --glass: rgba(18, 18, 18, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  --page-gradient: radial-gradient(circle at 50% 0%, rgba(198, 40, 40, 0.1), transparent 60%);
+  
+  --font-display: 'DM Sans', sans-serif;
   --font-body: 'DM Sans', sans-serif;
-  --radius: 16px;
-  --shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --radius: 8px; /* Simpler radius */
+  --shadow: 0 4px 20px -5px rgba(0,0,0,0.5);
+  --transition: all 0.2s ease;
 }
 
 [data-theme="light"] {
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --surface2: #f1f5f9;
-  --border: #e2e8f0;
-  --text: #0f172a;
-  --muted: #64748b;
-  --accent: #d97706;
-  --accent-glow: rgba(217, 119, 6, 0.3);
-  --accent2: #2563eb;
-  --accent3: #059669;
-  --danger: #ef4444;
-  --glass: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.05);
-  --page-gradient: radial-gradient(circle at 50% 0%, rgba(37,99,235,0.05), transparent),
-                   radial-gradient(circle at 100% 100%, rgba(217,119,6,0.05), transparent);
-  --shadow: 0 10px 30px -5px rgba(0,0,0,0.05);
+  /* Optional: Keep light theme mostly white/grey with red accents, or just force dark for this request. 
+     The user specifically asked for "dark background" so I will focus on the dark theme default.
+     I'll keep a simple light theme equivalent just in case. */
+  --bg: #ffffff;
+  --surface: #f5f5f5;
+  --surface2: #eeeeee;
+  --border: #e0e0e0;
+  --text: #121212;
+  --muted: #666666;
+  --accent: #b71c1c;
+  --accent-glow: rgba(183, 28, 28, 0.15);
+  --accent2: #d32f2f;
+  --accent3: #f44336;
+  --glass: rgba(255, 255, 255, 0.9);
+  --page-gradient: none;
 }
 
 body {
@@ -88,17 +90,15 @@ body {
 }
 .navbar-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 .navbar-brand {
-  font-family: 'Cinzel', serif;
-  font-size: 1.8rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text);
   cursor: pointer;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.02em;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 .navbar-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
@@ -153,19 +153,15 @@ body {
 }
 .hero h1 {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 8vw, 5rem);
+  font-size: clamp(2.5rem, 6vw, 4rem);
   line-height: 1.1;
   color: var(--text);
   margin-bottom: 24px;
-  letter-spacing: -0.03em;
+  font-weight: 800;
 }
 .hero h1 span { 
-  font-family: 'Great Vibes', cursive;
-  color: var(--accent); 
-  font-weight: 400;
-  font-size: 1.2em;
   display: block;
-  margin-top: -10px;
+  color: var(--accent);
 }
 .hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
 
@@ -423,6 +419,15 @@ function Toast({ msg, onDone }) {
   return <div className="toast">✅ {msg}</div>;
 }
 
+function Logo({ size = "1.5em", style }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style={{ width: size, height: size, color: "var(--accent)", ...style }}>
+      <path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V10H20ZM20,8H4V7A1,1,0,0,1,5,6H19a1,1,0,0,1,1,1Z" opacity="0.8"/>
+      <path d="M14.7,12.3a1,1,0,0,0-1.4,0l-2.3,2.3L9.7,13.3a1,1,0,0,0-1.4,1.4l2,2a1,1,0,0,0,1.4,0l3-3A1,1,0,0,0,14.7,12.3Z" />
+    </svg>
+  );
+}
+
 function Navbar({ page, setPage, store }) {
   const session = store.getSession();
   const cartCount = store.state.cart.reduce((s, c) => s + c.qty, 0);
@@ -432,7 +437,7 @@ function Navbar({ page, setPage, store }) {
     <nav className="navbar">
       <div className="container navbar-inner">
         <span className="navbar-brand" onClick={() => setPage(session ? (session.role === "admin" ? "adminDash" : session.role === "vendor" ? "vendorHome" : "userPortal") : "home")}>
-          <span style={{ fontSize: "1.4em", color: "var(--accent)" }}>✨</span> LuxeEvents
+          <Logo /> LuxeEvents
         </span>
         <div className="navbar-nav">
           <button className="btn btn-ghost" onClick={store.toggleTheme} title="Toggle Theme">{themeIcon}</button>
@@ -513,8 +518,8 @@ function AuthPage({ title, sub, children }) {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="auth-logo" style={{ marginBottom: 20, fontSize: "1.5rem", color: "var(--accent)", fontWeight: 700, fontFamily: "'Cinzel', serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-          <span style={{ fontSize: "1.2em" }}>✨</span> LuxeEvents
+        <div className="auth-logo" style={{ marginBottom: 20, fontSize: "1.5rem", fontWeight: 700, fontFamily: "var(--font-display)", display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
+          <Logo size="1.8em" /> LuxeEvents
         </div>
         <div className="auth-title">{title}</div>
         <div className="auth-sub">{sub}</div>

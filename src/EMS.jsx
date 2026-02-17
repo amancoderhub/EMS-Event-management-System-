@@ -241,7 +241,7 @@ body {
   background: var(--surface2); color: var(--text);
 }
 
-.table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th { padding: 16px; background: var(--surface2); color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
 td { padding: 16px; border-top: 1px solid var(--border); color: var(--text); }
@@ -253,7 +253,27 @@ tr:hover td { background: var(--surface2); }
   position: relative; overflow: hidden;
 }
 
+
+/* ── Tabs ── */
+.tabs { display: flex; gap: 12px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { white-space: nowrap; padding: 8px 16px; border-radius: 50px; background: var(--surface2); color: var(--muted); border: 1px solid transparent; cursor: pointer; transition: var(--transition); font-weight: 500; font-size: 0.9rem; }
+.tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+.tab:hover:not(.active) { background: var(--surface); color: var(--text); border-color: var(--border); }
+
+/* ── Responsive Layouts ── */
+.cart-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+.guest-layout { display: grid; grid-template-columns: 1fr 300px; gap: 24px; }
+.split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.admin-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; align-items: start; }
+.membership-layout { display: grid; grid-template-columns: 350px 1fr; gap: 32px; align-items: start; }
+.membership-layout.single { grid-template-columns: 1fr; }
+
 /* ── Responsive ── */
+@media (max-width: 900px) {
+  .cart-layout, .guest-layout, .split-layout, .admin-layout, .membership-layout { grid-template-columns: 1fr !important; }
+}
+
 @media (max-width: 640px) {
   .hero h1 { font-size: 2.5rem; }
   .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
@@ -261,6 +281,8 @@ tr:hover td { background: var(--surface2); }
   .navbar-nav { justify-content: center; width: 100%; gap: 12px; }
   .navbar-brand { font-size: 1.8rem; }
   .btn { padding: 8px 16px; font-size: 0.9rem; }
+  .container { padding: 0 16px; }
+  .auth-card, .form-card { padding: 24px; }
 }
 `;
 
@@ -799,7 +821,7 @@ function Cart({ setPage, store, toast }) {
   return (
     <div className="page"><div className="container">
       <div className="page-header"><h2>Your Cart</h2><p style={{ color: "var(--muted)" }}>{cart.length} item(s)</p></div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 24 }}>
+      <div className="cart-layout">
         <div>
           {cart.map(item => (
             <div className="cart-item" key={item.productId}>
@@ -1031,7 +1053,7 @@ function GuestList({ toast }) {
   return (
     <div className="page"><div className="container">
       <div className="page-header"><h2>Guest List</h2><p style={{ color: "var(--muted)" }}>Manage your event attendees</p></div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 24 }}>
+      <div className="guest-layout">
         <div className="table-wrap">
           <table>
             <thead><tr>{["Name", "Email", "RSVP", "Table", ""].map(h => <th key={h}>{h}</th>)}</tr></thead>
@@ -1280,7 +1302,7 @@ function RequestItem({ store, toast }) {
   return (
     <div className="page"><div className="container">
       <div className="page-header"><h2>Request an Item</h2><p style={{ color: "var(--muted)" }}>Can't find what you need? Request it!</p></div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+      <div className="split-layout">
         <div className="form-card" style={{ height: "fit-content" }}>
           <div className="form-title" style={{ fontSize: "1.2rem", marginBottom: 16 }}>New Request</div>
           <div className="field"><label>Item Name</label><input value={f.item} onChange={e => setF({ ...f, item: e.target.value })} placeholder="What do you need?" /></div>
@@ -1342,7 +1364,7 @@ function MaintainUser({ store, toast }) {
   return (
     <div className="page"><div className="container">
       <div className="page-header"><h2>User Management</h2></div>
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 32, alignItems: "start" }}>
+      <div className="admin-layout">
         <div className="table-wrap">
           <table>
             <thead><tr>{["Name", "Email", "Role", ""].map(h => <th key={h}>{h}</th>)}</tr></thead>
@@ -1412,7 +1434,7 @@ function Membership({ store, toast }) {
         <button className={`tab ${mode === "update" ? "active" : ""}`} onClick={() => setMode("update")}>Update Membership</button>
       </div>
       {mode === "add" && (
-        <div style={{ display: "grid", gridTemplateColumns: store.state.memberships.length > 0 ? "350px 1fr" : "1fr", gap: 32, alignItems: "start" }}>
+        <div className={`membership-layout ${store.state.memberships.length > 0 ? "" : "single"}`}>
           <div className="form-card">
             <div className="field"><label>Select Vendor</label>
               <select value={f.vendorId} onChange={e => setF({ ...f, vendorId: e.target.value })}>

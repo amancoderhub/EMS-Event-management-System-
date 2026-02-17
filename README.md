@@ -269,15 +269,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Author
 
-**Yogendra Dayal**
-- GitHub: [@yogendradayal](https://github.com/yogendradayal)
+**Aman Shrivastav**
+- GitHub: [@amangithub](https://github.com/amancoderhub)
 
 ## Support
-
 For support, issues, or suggestions, please open an issue on the GitHub repository.
-
 ---
 
-**Built with ❤️ using React & Vite**
-
-*Last Updated: February 17, 2026*
+**Built with using React & Vite**
